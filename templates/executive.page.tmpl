@@ -1,0 +1,36 @@
+{{ template "base" .}}
+
+
+
+{{define "content"}}
+
+    <div class="container">
+      `
+      <div class="row">
+        <div class="col">
+          <img
+            class="img-fluid image-thumbnail mx-auto d-block room-image"
+            src="./static/images/marjors-suite.png"
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <h1 class="text-center mb-4">Welcome to space executive rooms</h1>
+          <p>
+            hello here I am hello here I am hello here I am hello here I am
+            hello here I am hello here I am hello here I am hello here I am
+            hello here I am hello here I am hello here I am hello here I am
+          </p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col text-center">
+          <a class="btn btn-success" href="/reserve-m">Check Availability</a>
+        </div>
+      </div>
+    </div>
+
+{{end}}
