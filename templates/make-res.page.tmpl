@@ -5,35 +5,53 @@
 {{define "content"}}
 
     <div class="container">
-      `
+
       <div class="row">
         <div class="col">
           <h1>Make reservation</h1>
+          {{$res := index .Data "reservation"}}
           <form method="POST" action="#" class="'needs-validation" novalidate>
+            <input name="csrf_token" type="hidden" value="{{.CSRFToken}}">
+
             <div class="form-group mt-5">
-              <label for="'first_name">First name:</label>
+              <label for="first_name">First name:</label>
+              {{with .Form.Error.Get "first_name"}}
+              <label class="text-danger">{{.}}</label>
+              {{end}}
               <input
                 type="text"
                 name="first_name"
                 id="first_name"
-                class="form-control"
+                class='form-control {{with .Form.Error.Get "first_name"}} is-invalid {{end}}'
                 required
                 autocomplete="off"
+                value="{{$res.FirstName}}"
+
               />
             </div>
             <div class="form-group">
-              <label for="'last_name">Last name:</label>
+              <label for="last_name">Last name:</label>
+              {{with .Form.Error.Get "last_name"}}
+              <label class="text-danger">{{.}}</label>
+              {{end}}
               <input
-                type="text"
-                name="last_name"
-                id="last_name"
-                class="form-control"
-                required
-                autocomplete="off"
+                      autocomplete="off"
+                      class="form-control"
+                      id="last_name"
+                      name="last_name"
+                      required
+                      type="text"
+                      value="{{$res.LastName}}"
+
+
               />
             </div>
+
             <div class="form-group">
-              <label for="'email">Email:</label>
+              <label for="email">Email:</label>
+              {{with .Form.Error.Get "email"}}
+              <label class="text-danger">{{.}}</label>
+              {{end}}
               <input
                 type="email"
                 name="email"
@@ -41,10 +59,15 @@
                 class="form-control"
                 required
                 autocomplete="off"
-              />
+                value="{{$res.Email}}"
+
+              />  
             </div>
             <div class="form-group mt-5">
-              <label for="'phone"> Phone:</label>
+              <label for="phone"> Phone:</label>
+              {{with .Form.Error.Get "phone"}}
+              <label class="text-danger">{{.}}</label>
+              {{end}}
               <input
                 type="tel"
                 name="phone"
@@ -52,6 +75,8 @@
                 class="form-control"
                 required
                 autocomplete="off"
+                value="{{$res.Phone}}"
+
               />
             </div>
             <hr />
