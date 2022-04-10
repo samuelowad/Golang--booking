@@ -3,7 +3,10 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/samuelowad/bookings/src/driver"
 	"github.com/samuelowad/bookings/src/helpers"
+	"github.com/samuelowad/bookings/src/repository"
+	"github.com/samuelowad/bookings/src/repository/dbrepo"
 	"net/http"
 
 	"github.com/samuelowad/bookings/src/utils"
@@ -17,12 +20,14 @@ var Repo *Repository
 
 type Repository struct {
 	App *config.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 //NewRepo creates a new repository
-func NewRepo(a *config.AppConfig) *Repository {
+func NewRepo(app *config.AppConfig, db *driver.DB) *Repository {
 	return &Repository{
-		App: a,
+		App: app,
+		DB:  dbrepo.NewPostgresDBRepo(db.SQL, app),
 	}
 }
 
@@ -31,38 +36,38 @@ func NewHandler(r *Repository) {
 }
 
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.tmpl", &models.TemplateData{}, r)
+	render.Template(w, "home.page.tmpl", &models.TemplateData{}, r)
 	//fmt.Fprintf(w, "hello")
 
 }
 
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 
-	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{}, r)
+	render.Template(w, "about.page.tmpl", &models.TemplateData{}, r)
 
 }
 
 func (m *Repository) Reserve(w http.ResponseWriter, r *http.Request) {
 
-	render.RenderTemplate(w, "about.page.tmpl", &models.TemplateData{}, r)
+	render.Template(w, "about.page.tmpl", &models.TemplateData{}, r)
 
 }
 
 func (m *Repository) General(w http.ResponseWriter, r *http.Request) {
 
-	render.RenderTemplate(w, "general.page.tmpl", &models.TemplateData{}, r)
+	render.Template(w, "general.page.tmpl", &models.TemplateData{}, r)
 
 }
 
 func (m *Repository) Executive(w http.ResponseWriter, r *http.Request) {
 
-	render.RenderTemplate(w, "executive.page.tmpl", &models.TemplateData{}, r)
+	render.Template(w, "executive.page.tmpl", &models.TemplateData{}, r)
 
 }
 
 func (m *Repository) SearchAva(w http.ResponseWriter, r *http.Request) {
 
-	render.RenderTemplate(w, "search-ava.page.tmpl", &models.TemplateData{}, r)
+	render.Template(w, "search-ava.page.tmpl", &models.TemplateData{}, r)
 
 }
 
@@ -100,7 +105,7 @@ func (m *Repository) AvailabilityJson(w http.ResponseWriter, r *http.Request) {
 
 func (m *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 
-	render.RenderTemplate(w, "contact.page.tmpl", &models.TemplateData{}, r)
+	render.Template(w, "contact.page.tmpl", &models.TemplateData{}, r)
 
 }
 
@@ -110,7 +115,7 @@ func (m *Repository) MakeReservation(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 	data["reservation"] = empyReservation
 
-	render.RenderTemplate(w, "make-res.page.tmpl", &models.TemplateData{
+	render.Template(w, "make-res.page.tmpl", &models.TemplateData{
 		Form: utils.New(nil),
 		Data: data,
 	}, r)
@@ -140,7 +145,7 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
 
-		render.RenderTemplate(w, "make-res.page.tmpl", &models.TemplateData{
+		render.Template(w, "make-res.page.tmpl", &models.TemplateData{
 			Form: form,
 			Data: data,
 		}, r)
@@ -165,7 +170,7 @@ func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) 
 	data := make(map[string]interface{})
 	data["reservation"] = reservation
 
-	render.RenderTemplate(w, "res-summary.page.tmpl", &models.TemplateData{
+	render.Template(w, "res-summary.page.tmpl", &models.TemplateData{
 		Data: data,
 	}, r)
 

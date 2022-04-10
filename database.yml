@@ -1,6 +1,6 @@
 development:
   dialect: postgres
-  database: myapp_development
+  database: bookings
   user: postgres
   password: postgres
   host: 127.0.0.1
