@@ -8,6 +8,8 @@ import (
 	"github.com/samuelowad/bookings/src/repository"
 	"github.com/samuelowad/bookings/src/repository/dbrepo"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/samuelowad/bookings/src/utils"
 
@@ -128,12 +130,27 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 		helpers.ServerError(w, err)
 		return
 	}
+	startDate := r.Form.Get("start_date")
+	endDate := r.Form.Get("end_date")
+	dateLayout := "2006-01-02"
+	NewStartDate, err := time.Parse(dateLayout, startDate)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+	newEndDate, err := time.Parse(dateLayout, endDate)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
 
 	reservation := models.Reservation{
 		FirstName: r.Form.Get("first_name"),
 		LastName:  r.Form.Get("last_name"),
 		Phone:     r.Form.Get("phone"),
 		Email:     r.Form.Get("email"),
+		StartDate: NewStartDate,
+		EndDate:   newEndDate,
+		RoomID:    roomID,
 	}
 
 	form := utils.New(r.PostForm)
@@ -152,6 +169,10 @@ func (m *Repository) PostMakeReservation(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	m.App.Session.Put(r.Context(), "reservation", reservation)
+	err = m.DB.InsertReservation(reservation)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
 
 	http.Redirect(w, r, "/res-summary", http.StatusSeeOther)
 
