@@ -1,0 +1,3 @@
+add_index("reservations","email",{})
+
+add_index("reservations","last_name",{})
