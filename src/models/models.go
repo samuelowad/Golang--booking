@@ -42,7 +42,7 @@ type Reservation struct {
 	Room      Room
 }
 
-type RestrictionName struct {
+type RoomRestriction struct {
 	ID            int
 	StartDate     time.Time
 	EndDate       time.Time

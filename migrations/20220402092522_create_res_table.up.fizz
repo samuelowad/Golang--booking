@@ -1,4 +1,4 @@
-create_table("reservations") {
+create_table(" ") {
 t.Column("id","integer",{primary:true})
   t.Column("email", "string", {})
   t.Column("phone", "string", {"default":""})
@@ -22,7 +22,6 @@ t.Column("id","integer",{primary:true})
 
 create_table("room_restrictions") {
 t.Column("id","integer",{primary:true})
-  t.Column("restriction_name", "string", {})
    t.Column("start_date", "date", {})
     t.Column("end_date", "date", {})
       t.Column("room_id", "integer", {})
