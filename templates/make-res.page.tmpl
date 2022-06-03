@@ -5,11 +5,19 @@
 {{define "content"}}
 
     <div class="container">
+      {{$res := index .Data "reservation"}}
+
 
       <div class="row">
         <div class="col">
           <h1>Make reservation</h1>
-          {{$res := index .Data "reservation"}}
+<p>
+  <strong>Reservation</strong><br>
+    Room:{{$res.Room.RoomName}}<br>
+  Arrival: {{index .StringMap "start_date"}}<br>
+  Departure: {{index .StringMap "end_date"}}<br>
+</p>
+
           <form method="POST" action="#" class="'needs-validation" novalidate>
             <input name="csrf_token" type="hidden" value="{{.CSRFToken}}">
 
@@ -46,15 +54,9 @@
 
               />
             </div>
-            <div class="form-group">
-              <label for="start_date"></label>
-              <input type="text" name="start_date" id="start_date" class="form-control">
-            </div>
-            <div class="form-group">
-              <label for="end_date"></label>
-              <input type="text" name="end_date" id="end_date" class="form-control">
-            </div>
-            <input type="hidden" name="room_id" value="1">
+            <input type="hidden" name="start_date" value="{{index .StringMap "start_date"}}">
+            <input type="hidden" name="end_date" value="{{index .StringMap "end_date"}}">
+            <input type="hidden" name="room_id" value="{{$res.RoomID}}"/>
             <div class="form-group">
               <label for="email">Email:</label>
               {{with .Form.Error.Get "email"}}

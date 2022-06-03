@@ -1,7 +1,8 @@
 package render
 
 import (
-	"github.com/samuelowad/bookings/src/models"
+	"fmt"
+	"github.com/samuelowad/bookings/internal/models"
 	"net/http"
 	"testing"
 )
@@ -54,20 +55,20 @@ func TestRenderTemplate(t *testing.T) {
 
 	var ww myWriter
 
-	//err = RenderTemplate(&ww, "home.page.tmpl", &models.TemplateData{}, r)
-	//if err != nil {
-	//	fmt.Println(err)
-	//	t.Error("error writing template")
-	//}
+	err = Template(&ww, "home.page.tmpl", &models.TemplateData{}, r)
+	if err != nil {
+		fmt.Println(err)
+		t.Error("error writing template")
+	}
 
-	err = RenderTemplate(&ww, "not.page.tmpl", &models.TemplateData{}, r)
+	err = Template(&ww, "not.page.tmpl", &models.TemplateData{}, r)
 	if err == nil {
 		t.Error("rendered non existing page")
 	}
 }
 
 func TestNewTemplates(t *testing.T) {
-	NewTemplates(app)
+	NewRender(app)
 }
 
 func TestCreateTemplateCache(t *testing.T) {

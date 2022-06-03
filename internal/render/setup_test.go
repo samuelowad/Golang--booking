@@ -3,8 +3,8 @@ package render
 import (
 	"encoding/gob"
 	"github.com/alexedwards/scs/v2"
-	"github.com/samuelowad/bookings/src/config"
-	"github.com/samuelowad/bookings/src/models"
+	"github.com/samuelowad/bookings/internal/config"
+	"github.com/samuelowad/bookings/internal/models"
 	"net/http"
 	"os"
 	"testing"

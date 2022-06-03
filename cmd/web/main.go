@@ -3,18 +3,18 @@ package main
 import (
 	"encoding/gob"
 	"fmt"
-	"github.com/samuelowad/bookings/src/driver"
-	"github.com/samuelowad/bookings/src/helpers"
-	"github.com/samuelowad/bookings/src/models"
+	"github.com/samuelowad/bookings/internal/driver"
+	"github.com/samuelowad/bookings/internal/helpers"
+	"github.com/samuelowad/bookings/internal/models"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/samuelowad/bookings/src/config"
-	"github.com/samuelowad/bookings/src/handlers"
-	"github.com/samuelowad/bookings/src/render"
+	"github.com/samuelowad/bookings/internal/config"
+	"github.com/samuelowad/bookings/internal/handlers"
+	"github.com/samuelowad/bookings/internal/render"
 )
 
 const portNumber = ":8080"
@@ -33,6 +33,10 @@ func main() {
 		log.Fatal(err)
 	}
 	defer db.SQL.Close()
+
+	defer close(app.MailChan)
+
+	listenForMails()
 
 	fmt.Println(fmt.Sprintf("starting on part %s", portNumber))
 
@@ -60,6 +64,9 @@ func run() (*driver.DB, error) {
 	gob.Register(models.Room{})
 	gob.Register(models.Restriction{})
 	session = scs.New()
+
+	mailChan := make(chan models.MailData)
+	app.MailChan = mailChan
 
 	session.Lifetime = 24 * time.Hour
 	session.Cookie.Persist = true

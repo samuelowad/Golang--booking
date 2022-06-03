@@ -72,7 +72,8 @@
             const elem=document.getElementById('reservation-modal');
             const rangepicker= new DateRangePicker(elem, {
               format:'yyyy-mm-dd',
-              showOnFocused: true
+              showOnFocused: true,
+              minDate:new Date()
             })
           },
           didOpen:()=>{
@@ -85,11 +86,25 @@
 
     let formData = new FormData(form)
     formData.append('csrf_token', "{{.CSRFToken}}")
+        formData.append('room_id',"1");
 
       fetch('/search-ava-json',{
       method:'POST',
-      body:formData
-      }).then(response => response.json()).then(data=>{console.log(data)})
+      body:formData,
+      }).then(response => response.json()).then(data=>{
+        if(!data.ok){
+          attention.error({
+            msg:"No Availability"
+          })
+          return
+        }
+        attention.custom({
+          icon:'success',
+          msg:'<p>Room is Available</p>' +'<p><a href="/book-room?id='+ data.room_id+'&s='+data.start_date+'&e='+data.end_date + '"class="btn btn-primary">'+'Book Now!</a></p>',
+            showConfirmButton:false
+
+        })
+        console.log(data)})
       }
       })
       })

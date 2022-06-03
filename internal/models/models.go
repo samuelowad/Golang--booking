@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 //DB models
 type User struct {
@@ -54,4 +56,12 @@ type RoomRestriction struct {
 	ReservationID int
 	RestrictionID int
 	Restriction   Restriction
+}
+
+type MailData struct {
+	To       string
+	From     string
+	Subject  string
+	Content  string
+	Template string
 }

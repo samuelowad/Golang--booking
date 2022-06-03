@@ -3,31 +3,27 @@ package handlers
 import (
 	"encoding/gob"
 	"fmt"
+	"github.com/alexedwards/scs/v2"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/justinas/nosurf"
+	"github.com/samuelowad/bookings/internal/config"
+	"github.com/samuelowad/bookings/internal/models"
+	"github.com/samuelowad/bookings/internal/render"
 	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"testing"
 	"time"
-
-	"github.com/alexedwards/scs/v2"
-	"github.com/justinas/nosurf"
-	"github.com/samuelowad/bookings/src/config"
-	"github.com/samuelowad/bookings/src/models"
-	"github.com/samuelowad/bookings/src/render"
 )
 
 var app config.AppConfig
 var pathToTemplate = "./../../templates/"
 var functions = template.FuncMap{}
 
-var session *scs.SessionManager
-var infoLog *log.Logger
-var errorLog *log.Logger
-
-func getRoute() http.Handler {
+func TestMain(m *testing.M) {
 	app.InProd = false
 	gob.Register(models.Reservation{})
 	session = scs.New()
@@ -53,10 +49,18 @@ func getRoute() http.Handler {
 	app.TemplateCache = tc
 	app.UseCache = true
 
-	repo := NewRepo(&app)
+	repo := NewTestRepo(&app)
 	NewHandler(repo)
 
 	render.NewRender(&app)
+	os.Exit(m.Run())
+}
+
+var session *scs.SessionManager
+var infoLog *log.Logger
+var errorLog *log.Logger
+
+func getRoute() http.Handler {
 
 	mux := chi.NewRouter()
 

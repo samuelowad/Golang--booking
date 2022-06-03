@@ -2,7 +2,7 @@ package helpers
 
 import (
 	"fmt"
-	"github.com/samuelowad/bookings/src/config"
+	"github.com/samuelowad/bookings/internal/config"
 	"net/http"
 	"runtime/debug"
 )

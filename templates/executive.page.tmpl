@@ -28,9 +28,86 @@
 
       <div class="row">
         <div class="col text-center">
-          <a class="btn btn-success" href="/reserve-m">Check Availability</a>
+          <a id="checkAva" class="btn btn-success" href="#!">Check Availability</a>
         </div>
       </div>
     </div>
 
+{{end}}
+
+{{define "js"}}
+  <script>
+    document.getElementById('checkAva').addEventListener('click', function(){
+      // notify('this is a message','success')
+      /*notifyModal(
+        'title!',
+       "<em>hello</em>",
+       'success',
+        'Cool'
+     )
+*/
+
+
+      const html =`
+      <form id='checkAvaForm' action="" method='post' novalidate>
+        <div class="form-row">
+          <div class="col">
+            <div class="form-row" id='reservation-modal'>
+              <div class="col">
+                <input disabled required type="text" class="form-control" name="start" id='start' placeholder='start'>
+              </div>
+
+              <div class="col">
+                <input disabled required type="text" class="form-control" name="end" id='end' placeholder='end'>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      `
+      //attention.toast({msg:'Hello'})
+      attention.custom({msg:html, title:'Choose your date',
+        willOpen:()=>{
+          const elem=document.getElementById('reservation-modal');
+          const rangepicker= new DateRangePicker(elem, {
+            format:'yyyy-mm-dd',
+            showOnFocused: true,
+            minDate:new Date()
+          })
+        },
+        didOpen:()=>{
+          document.getElementById('start').removeAttribute('disabled')
+          document.getElementById('end').removeAttribute('disabled')
+        },
+        callback: function(result){
+
+          let form = document.getElementById('checkAvaForm')
+
+          let formData = new FormData(form)
+          formData.append('csrf_token', "{{.CSRFToken}}")
+          formData.append('room_id',"2");
+
+          fetch('/search-ava-json',{
+            method:'POST',
+            body:formData,
+          }).then(response => response.json()).then(data=>{
+            if(!data.ok){
+              attention.error({
+                msg:"No Availability"
+              })
+              return
+            }
+            attention.custom({
+              icon:'success',
+              msg:'<p>Room is Available</p>' +'<p><a href="/book-room?id='+ data.room_id+'&s='+data.start_date+'&e='+data.end_date + '"class="btn btn-primary">'+'Book Now!</a></p>',
+              showConfirmButton:false
+
+            })
+            console.log(data)})
+        }
+      })
+    })
+
+
+  </script>
 {{end}}
