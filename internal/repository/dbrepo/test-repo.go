@@ -51,9 +51,47 @@ func (m *testDBRepo) GetRoomByID(id int) (models.Room, error) {
 }
 
 //GetUserByID
-func (m *postgresDBRepo) GetUserByID(id int) (models.User, error) {
+func (m *testDBRepo) GetUserByID(id int) (models.User, error) {
 
 	var u models.User
 
 	return u, nil
+}
+
+//UpdateUser updates user data
+func (m *testDBRepo) UpdateUser(u models.User) error {
+
+	return nil
+}
+
+//Authenticate authenticates the user with the provided data
+func (m *testDBRepo) Authenticate(email, password string) (int, string, error) {
+
+	var id int
+	var hashedPassword string
+
+	return id, hashedPassword, nil
+}
+
+//AllRepositories returns all reservation
+func (m *testDBRepo) AllReservations() ([]models.Reservation, error) {
+
+	var reservation []models.Reservation
+
+	return reservation, nil
+}
+
+//AllRepositories returns all reservation
+func (m *testDBRepo) AllNewReservations() ([]models.Reservation, error) {
+
+	var reservation []models.Reservation
+
+	return reservation, nil
+}
+
+func (m *testDBRepo) GetReservationByID(id int) (models.Reservation, error) {
+
+	var reservation models.Reservation
+
+	return reservation, nil
 }

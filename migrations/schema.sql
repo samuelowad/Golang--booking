@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 14.2
--- Dumped by pg_dump version 14.2
+-- Dumped from database version 14.3
+-- Dumped by pg_dump version 14.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -76,7 +76,8 @@ CREATE TABLE public.reservations (
     end_date date NOT NULL,
     room_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    processed integer DEFAULT 0 NOT NULL
 );
 
 

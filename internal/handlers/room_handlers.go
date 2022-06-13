@@ -9,6 +9,7 @@ import (
 	"github.com/samuelowad/bookings/internal/helpers"
 	"github.com/samuelowad/bookings/internal/repository"
 	"github.com/samuelowad/bookings/internal/repository/dbrepo"
+	"log"
 	"net/http"
 	"strconv"
 	"time"
@@ -101,6 +102,8 @@ func (m *Repository) PostSearchAva(w http.ResponseWriter, r *http.Request) {
 	rooms, err := m.DB.SearchAvailabilityForAllRooms(date.startDate, date.endDate)
 
 	if err != nil {
+
+		log.Println(err)
 		helpers.ServerError(w, err)
 		return
 	}

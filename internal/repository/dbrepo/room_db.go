@@ -10,7 +10,8 @@ func (m *postgresDBRepo) AllUsers() bool { return true }
 
 //InsertReservation inserts a new reservation
 func (m *postgresDBRepo) InsertReservation(res models.Reservation) (int, error) {
-	ctx := getCtx()
+	ctx, cancel := getCtx()
+	defer cancel()
 
 	var newID int
 
@@ -33,7 +34,8 @@ func (m *postgresDBRepo) InsertReservation(res models.Reservation) (int, error) 
 
 //InsertRoomRestriction insert room restriction in database
 func (m *postgresDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
-	ctx := getCtx()
+	ctx, cancel := getCtx()
+	defer cancel()
 
 	statement := `insert into room_restrictions(start_date, end_date,room_id,reservation_id,created_at,updated_at,restriction_id) 
 	values 
@@ -50,7 +52,8 @@ func (m *postgresDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
 // retruns if Availability exists
 
 func (m *postgresDBRepo) SearchAvailabilityByDateByRoomID(start, end time.Time, roomID int) (bool, error) {
-	ctx := getCtx()
+	ctx, cancel := getCtx()
+	defer cancel()
 
 	var numRows int
 
@@ -78,7 +81,8 @@ func (m *postgresDBRepo) SearchAvailabilityByDateByRoomID(start, end time.Time, 
 }
 
 func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]models.Room, error) {
-	ctx := getCtx()
+	ctx, cancel := getCtx()
+	defer cancel()
 
 	var rooms []models.Room
 
@@ -116,7 +120,8 @@ func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]
 }
 
 func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
-	ctx := getCtx()
+	ctx, cancel := getCtx()
+	defer cancel()
 
 	var room models.Room
 
@@ -132,9 +137,8 @@ func (m *postgresDBRepo) GetRoomByID(id int) (models.Room, error) {
 	return room, nil
 }
 
-func getCtx() context.Context {
+func getCtx() (context.Context, context.CancelFunc) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-	defer cancel()
 
-	return ctx
+	return ctx, cancel
 }
